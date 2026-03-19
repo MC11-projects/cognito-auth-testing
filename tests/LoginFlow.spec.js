@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import dotenv from 'dotenv'
-dotenv.config()
+// import dotenv from 'dotenv'
+// dotenv.config()
 
 test('User Login', async({page}) => {
     const email = process.env.TEST_EMAIL1
