@@ -8,9 +8,13 @@ test('User Login', async({page}) => {
     const baseUrl = process.env.BASE_URL
 
     await page.goto(baseUrl)
+    await page.screenshot({ path: 'screenshot-1-homepage.png' })
     await page.getByText('Login with Cognito').click()
+    await page.screenshot({ path: 'screenshot-2-after-click.png' })
     await page.getByRole('textbox', {name: 'Email address'}).fill(email)
+    await page.screenshot({ path: 'screenshot-3-email-filled.png' })
     await page.getByText('Next').click()
+    await page.screenshot({ path: 'screenshot-4-after-next.png' })
     await page.getByRole('textbox', {name: 'Password'}).waitFor()
     await page.getByRole('textbox', {name: 'Password'}).fill(password)
     await page.getByText('Continue').click()
