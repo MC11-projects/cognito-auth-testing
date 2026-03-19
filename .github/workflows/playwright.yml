@@ -17,6 +17,20 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+    - name: Start HTTP Server
+      run: |
+        python -m http.server 3000 &
+        sleep 2
+      working-directory: ./
+      
+    - name: Run Playwright tests
+      run: npx playwright test
+      env:
+        TEST_EMAIL1: ${{ secrets.TEST_EMAIL1 }}
+        TEST_PASSWORD1: ${{ secrets.TEST_PASSWORD1 }}
+        TEST_EMAIL2: ${{ secrets.TEST_EMAIL2 }}
+        TEST_PASSWORD2: ${{ secrets.TEST_PASSWORD2 }}
+        BASE_URL: http://localhost:3000
     - name: Run Playwright tests
       run: npx playwright test
     - uses: actions/upload-artifact@v4
