@@ -22,13 +22,7 @@ jobs:
         python -m http.server 3000 &
         sleep 2
       working-directory: ./
-    - name: Upload screenshots on failure
-      if: failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: screenshots
-        path: '*.png'
-      
+
     - name: Run Playwright tests
       run: npx playwright test
       env:
@@ -37,8 +31,12 @@ jobs:
         TEST_EMAIL2: ${{ secrets.TEST_EMAIL2 }}
         TEST_PASSWORD2: ${{ secrets.TEST_PASSWORD2 }}
         BASE_URL: http://localhost:3000
-    - name: Run Playwright tests
-      run: npx playwright test
+    - name: Upload screenshots on failure
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: screenshots
+        path: '*.png'
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
