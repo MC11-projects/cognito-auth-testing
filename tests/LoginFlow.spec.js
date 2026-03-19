@@ -11,6 +11,7 @@ test('User Login', async({page}) => {
     await page.screenshot({ path: 'screenshot-1-homepage.png' })
     await page.getByText('Login with Cognito').click()
     await page.screenshot({ path: 'screenshot-2-after-click.png' })
+    await page.getByRole('textbox', {name: 'Email address'}).waitFor()
     await page.getByRole('textbox', {name: 'Email address'}).fill(email)
     await page.screenshot({ path: 'screenshot-3-email-filled.png' })
     await page.getByText('Next').click()
