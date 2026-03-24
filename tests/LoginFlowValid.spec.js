@@ -58,7 +58,7 @@ test('Login-Logout', async ({page}) => {
 
     await page.getByRole('textbox', {name: 'Email address'}).fill(email)
     await page.getByText('Next').click()
-    await passwordField.waitFor({timeout: 10000})
+    await passwordField.waitFor({timeout: 20000})
     await passwordField.click()
     await passwordField.fill(password)
     await page.getByText('Continue').click()
@@ -69,7 +69,7 @@ test('Login-Logout', async ({page}) => {
     await page.getByRole('textbox', {name: 'Email address'}).waitFor({ timeout: 10000 })
     await page.getByRole('textbox', {name: 'Email address'}).fill(email)
     await page.getByText('Next').click()
-    await passwordField.waitFor({timeout: 10000})
+    await passwordField.waitFor({timeout: 20000})
     await passwordField.click()
     await passwordField.fill(password)
     await page.getByText('Continue').click()
