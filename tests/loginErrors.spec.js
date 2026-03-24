@@ -1,6 +1,11 @@
 import { test, expect } from '@playwright/test';
-// import dotenv from 'dotenv' //enable only for local tests
-// dotenv.config() //enable only for local tests
+import dotenv from 'dotenv'
+import fs from 'fs'
+
+if (fs.existsSync('.env')) {
+    dotenv.config()
+}
+
 
 test.beforeEach(async ({page}) => {
     const baseUrl = process.env.BASE_URL
@@ -40,11 +45,13 @@ test('Invalid Email', async ({page}) => {
 
 test('Invalid Password', async ({page}) => {
     const email = process.env.TEST_EMAIL1
+    const passwordField = page.getByRole('textbox', {name: 'Password'})
     
     await page.getByRole('textbox', {name: 'Email address'}).fill(email)
     await page.getByText('Next').click()
-    await page.getByRole('textbox', {name: 'Password'}).waitFor({ timeout: 10000 })
-    await page.getByRole('textbox', {name: 'Password'}).fill('password')
+    await passwordField.waitFor({timeout: 10000})
+    await passwordField.click()
+    await passwordField.fill('password')
     await page.getByText('Continue').click()
     await expect(page.getByText('Invalid input: Incorrect username or password.', {exact: true})).toBeVisible()
 

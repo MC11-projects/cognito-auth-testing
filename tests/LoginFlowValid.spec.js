@@ -1,6 +1,10 @@
 import { test, expect } from '@playwright/test';
-// import dotenv from 'dotenv' //enable only for local tests
-// dotenv.config() //enable only for local tests
+import dotenv from 'dotenv'
+import fs from 'fs'
+
+if (fs.existsSync('.env')) {
+    dotenv.config()
+}
 
 test.beforeEach(async ({page}) => {
     const baseUrl = process.env.BASE_URL
