@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import dotenv from 'dotenv' //enable only for local tests
-dotenv.config() //enable only for local tests
+// import dotenv from 'dotenv' //enable only for local tests
+// dotenv.config() //enable only for local tests
 
 test.beforeEach(async ({page}) => {
     const baseUrl = process.env.BASE_URL
@@ -36,7 +36,7 @@ test('Invalid Email', async ({page}) => {
     await page.getByText('Next').click()
     await expect(page.getByText('Invalid email address.')).toBeVisible()
     await expect(page.getByText('Invalid input: Please check your input and try again.', {exact: true})).toBeVisible()
-    
+
 })
 
 test('Invalid Password', async ({page}) => {
