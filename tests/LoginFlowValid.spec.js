@@ -70,3 +70,19 @@ test('Login-Logout', async ({page}) => {
     await page.getByText('Logout').click()
     await expect(page.getByText('AWS Cognito Authentication Test')).toBeVisible()
 })
+
+test('Show your password checkbox', async ({page}) => {
+    const email = process.env.TEST_EMAIL1
+    const passwordField = page.getByRole('textbox', {name: 'Password'})
+
+    await page.getByRole('textbox', {name: 'Email address'}).fill(email)
+    await page.getByText('Next').click()
+    await passwordField.waitFor({timeout: 10000})
+    await passwordField.click()
+    await passwordField.fill('password')
+    await expect(page.locator('.awsui_input_2rhyz_uz5yt_149')).toHaveAttribute('type', 'password')
+    await page.getByRole('checkbox', {name: 'Show Password'}).click()
+    await expect(page.locator('.awsui_input_2rhyz_uz5yt_149')).toHaveAttribute('type', 'text')
+    await page.getByRole('checkbox', {name: 'Show Password'}).click()
+    await expect(page.locator('.awsui_input_2rhyz_uz5yt_149')).toHaveAttribute('type', 'password')
+})
