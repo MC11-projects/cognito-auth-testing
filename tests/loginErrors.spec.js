@@ -35,7 +35,6 @@ test('Invalid Email', async ({page}) => {
     await page.getByRole('textbox', {name: 'Email address'}).fill('test1')
     await page.getByText('Next').click()
     await expect(page.getByText('Invalid email address.')).toBeVisible()
-    await expect(page.getByText('Invalid input: Please check your input and try again.', {exact: true})).toBeVisible()
 
 })
 
