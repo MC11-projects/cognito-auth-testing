@@ -1,13 +1,21 @@
 import { test, expect } from '@playwright/test';
 import dotenv from 'dotenv'
 import fs from 'fs'
+import { EmailPage } from '../pages/EmailPage';
+import { PasswordPage } from '../pages/PasswordPage';
+import { PasswordResetPage } from '../pages/PasswordResetPage';
 
 if (fs.existsSync('.env')) {
     dotenv.config()
 }
 
+let emailPage
+let passwordPage
+
 test.beforeEach(async ({page}) => {
     const baseUrl = process.env.BASE_URL
+    emailPage = new EmailPage(page)
+    passwordPage = new PasswordPage(page)
     await page.goto(baseUrl)
     await page.getByText('Login with Cognito').click()
     await page.getByRole('textbox', {name: 'Email address'}).waitFor({ timeout: 10000 })
@@ -16,14 +24,11 @@ test.beforeEach(async ({page}) => {
 test('User Login 1', async({page}) => {
     const email = process.env.TEST_EMAIL1
     const password = process.env.TEST_PASSWORD1
-    const passwordField = page.getByRole('textbox', {name: 'Password'})
 
-    await page.getByRole('textbox', {name: 'Email address'}).fill(email)
-    await page.getByText('Next').click()
-    await passwordField.waitFor({timeout: 10000})
-    await passwordField.click()
-    await passwordField.fill(password)
-    await page.getByText('Continue').click()
+    await emailPage.EmailInput(email)
+    await emailPage.clickNextButton()
+    await passwordPage.PasswordInput(password)
+    await passwordPage.clickContinue()
 
     await expect(page.getByText('Access Token')).toBeVisible()
 
@@ -35,14 +40,11 @@ test('User Login 1', async({page}) => {
 test('User Login 2', async({page}) => {
     const email = process.env.TEST_EMAIL2
     const password = process.env.TEST_PASSWORD2
-    const passwordField = page.getByRole('textbox', {name: 'Password'})
 
-    await page.getByRole('textbox', {name: 'Email address'}).fill(email)
-    await page.getByText('Next').click()
-    await passwordField.waitFor({timeout: 10000})
-    await passwordField.click()
-    await passwordField.fill(password)
-    await page.getByText('Continue').click()
+    await emailPage.EmailInput(email)
+    await emailPage.clickNextButton()
+    await passwordPage.PasswordInput(password)
+    await passwordPage.clickContinue()
 
     await expect(page.getByText('Access Token')).toBeVisible()
 
@@ -54,25 +56,19 @@ test('User Login 2', async({page}) => {
 test('Login-Logout', async ({page}) => {
     const email = process.env.TEST_EMAIL2
     const password = process.env.TEST_PASSWORD2
-    const passwordField = page.getByRole('textbox', {name: 'Password'})
 
-    await page.getByRole('textbox', {name: 'Email address'}).fill(email)
-    await page.getByText('Next').click()
-    await passwordField.waitFor({timeout: 10000})
-    await passwordField.click()
-    await passwordField.fill(password)
-    await page.getByText('Continue').click()
+    await emailPage.EmailInput(email)
+    await emailPage.clickNextButton()
+    await passwordPage.PasswordInput(password)
+    await passwordPage.clickContinue()
     
     await page.getByText('Logout').click()
 
     await page.getByText('Login with Cognito').click()
-    await page.getByRole('textbox', {name: 'Email address'}).waitFor({ timeout: 10000 })
-    await page.getByRole('textbox', {name: 'Email address'}).fill(email)
-    await page.getByText('Next').click()
-    await passwordField.waitFor({timeout: 10000})
-    await passwordField.click()
-    await passwordField.fill(password)
-    await page.getByText('Continue').click()
+    await emailPage.EmailInput(email)
+    await emailPage.clickNextButton()
+    await passwordPage.PasswordInput(password)
+    await passwordPage.clickContinue()
 
     await page.getByText('Logout').click()
     await expect(page.getByText('AWS Cognito Authentication Test')).toBeVisible()
@@ -80,38 +76,27 @@ test('Login-Logout', async ({page}) => {
 
 test('Show your password checkbox', async ({page}) => {
     const email = process.env.TEST_EMAIL1
-    const passwordField = page.getByRole('textbox', {name: 'Password'})
 
-    await page.getByRole('textbox', {name: 'Email address'}).fill(email)
-    await page.getByText('Next').click()
-    await passwordField.waitFor({timeout: 10000})
-    await passwordField.click()
-    await passwordField.fill('password')
+    await emailPage.EmailInput(email)
+    await emailPage.clickNextButton()
+    await passwordPage.PasswordInput('password')
+    await passwordPage.clickContinue()
     await expect(page.locator('.awsui_input_2rhyz_uz5yt_149')).toHaveAttribute('type', 'password')
-    await page.getByRole('checkbox', {name: 'Show Password'}).click()
+    await passwordPage.toggleShowPassword()
     await expect(page.locator('.awsui_input_2rhyz_uz5yt_149')).toHaveAttribute('type', 'text')
-    await page.getByRole('checkbox', {name: 'Show Password'}).click()
+    await passwordPage.toggleShowPassword()
     await expect(page.locator('.awsui_input_2rhyz_uz5yt_149')).toHaveAttribute('type', 'password')
 })
 
 test('Forgot your password UI check', async({page}) => {
     const email = process.env.TEST_EMAIL3
-    await page.getByRole('textbox', {name: 'Email address'}).fill(email)
-    await page.getByText('Next').click()
-    await page.getByText('Forgot your password?', {exact: true}).click()
-    await page.getByRole('textbox', {name: 'Email address'}).fill(email)
-    await page.getByRole('button', {name: 'Reset my password'}).click()
+    const resetPage = new PasswordResetPage(page)
 
-    await expect(page.getByText('Reset password', {exact: true})).toBeVisible()
-    await expect(page.getByText('We have sent a password reset code in an Email message to t***@e***. Enter your code and your new password.')).toBeVisible()
-    await expect(page.getByText('Code', {exact: true})).toBeVisible()
-    await expect(page.getByPlaceholder('Enter code')).toBeVisible()
-    await expect(page.getByText('New password', {exact: true})).toBeVisible()
-    await expect(page.getByPlaceholder('Enter new password', {exact: true})).toBeVisible()
-    await expect(page.getByText('Confirm new password', {exact: true})).toBeVisible()
-    await expect(page.getByPlaceholder('Reenter new password')).toBeVisible()
-    await expect(page.getByRole('checkbox', {name: 'Show Password'})).toBeVisible()
-    await expect(page.getByRole('button', {name: 'Change password'})).toBeVisible()
-    await expect(page.getByRole('button', {name: 'Back'})).toBeVisible()
+    await emailPage.EmailInput(email)
+    await emailPage.clickNextButton()
+    await passwordPage.clickForgotPassword()
+    await emailPage.EmailInput(email)
+    await resetPage.ResetMyPasswordButton()
+    await resetPage.validateResetPageUI()
 
 })
