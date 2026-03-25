@@ -93,3 +93,25 @@ test('Show your password checkbox', async ({page}) => {
     await page.getByRole('checkbox', {name: 'Show Password'}).click()
     await expect(page.locator('.awsui_input_2rhyz_uz5yt_149')).toHaveAttribute('type', 'password')
 })
+
+test('Forgot your password UI check', async({page}) => {
+    const email = process.env.TEST_EMAIL3
+    await page.getByRole('textbox', {name: 'Email address'}).fill(email)
+    await page.getByText('Next').click()
+    await page.getByText('Forgot your password?', {exact: true}).click()
+    await page.getByRole('textbox', {name: 'Email address'}).fill(email)
+    await page.getByRole('button', {name: 'Reset my password'}).click()
+
+    await expect(page.getByText('Reset password', {exact: true})).toBeVisible()
+    await expect(page.getByText('We have sent a password reset code in an Email message to t***@e***. Enter your code and your new password.')).toBeVisible()
+    await expect(page.getByText('Code', {exact: true})).toBeVisible()
+    await expect(page.getByPlaceholder('Enter code')).toBeVisible()
+    await expect(page.getByText('New password', {exact: true})).toBeVisible()
+    await expect(page.getByPlaceholder('Enter new password', {exact: true})).toBeVisible()
+    await expect(page.getByText('Confirm new password', {exact: true})).toBeVisible()
+    await expect(page.getByPlaceholder('Reenter new password')).toBeVisible()
+    await expect(page.getByRole('checkbox', {name: 'Show Password'})).toBeVisible()
+    await expect(page.getByRole('button', {name: 'Change password'})).toBeVisible()
+    await expect(page.getByRole('button', {name: 'Back'})).toBeVisible()
+
+})
