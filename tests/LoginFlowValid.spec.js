@@ -1,9 +1,9 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
 import dotenv from 'dotenv'
 import fs from 'fs'
-import { EmailPage } from '../pages/EmailPage';
-import { PasswordPage } from '../pages/PasswordPage';
-import { PasswordResetPage } from '../pages/PasswordResetPage';
+import { EmailPage } from '../pages/EmailPage'
+import { PasswordPage } from '../pages/PasswordPage'
+import { PasswordResetPage } from '../pages/PasswordResetPage'
 
 if (fs.existsSync('.env')) {
     dotenv.config()
