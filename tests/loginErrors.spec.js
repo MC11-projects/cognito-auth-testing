@@ -20,7 +20,6 @@ test.beforeEach(async ({page}) => {
     passwordPage = new PasswordPage(page)
     await page.goto(baseUrl)
     await page.getByText('Login with Cognito').click()
-    await page.getByRole('textbox', {name: 'Email address'}).waitFor({ timeout: 10000 })
 })
 
 test('Empty Email field', async ({page}) => {

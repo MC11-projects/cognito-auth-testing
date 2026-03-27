@@ -10,8 +10,6 @@ if (fs.existsSync('.env')) {
     dotenv.config()
 }
 
-const API_BASE_URL = 'https://zgw5kb3ajl.execute-api.us-east-1.amazonaws.com/prod' // Add this to .env later - hardcoded currently for development, will be moved to .env for configurability
-
 // API test data shared across tests
 let idToken
 let createdItemId
@@ -44,7 +42,7 @@ test.beforeEach(async ({page}) => {
 
 
 test('Create item via API', async () => {
-    const response = await fetch(`${API_BASE_URL}/items`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/items`, {
         method: 'POST',
         headers: {
             'Authorization': idToken,
@@ -69,7 +67,7 @@ test('Create item via API', async () => {
 })
 
 test('List items via API', async () => {
-    const response = await fetch(`${API_BASE_URL}/items`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/items`, {
         method: 'GET',
         headers: {
             'Authorization': idToken
@@ -84,7 +82,7 @@ test('List items via API', async () => {
 })
 
 test('Delete item via API', async () => {
-    const response = await fetch(`${API_BASE_URL}/items/${createdItemId}`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/items/${createdItemId}`, {
         method: 'DELETE',
         headers: {
             'Authorization': idToken
@@ -95,7 +93,7 @@ test('Delete item via API', async () => {
 })
 
 test('Create and update item via API', async () => {
-    const response = await fetch(`${API_BASE_URL}/items`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/items`, {
         method: 'POST',
         headers: {
             'Authorization': idToken,
@@ -114,7 +112,7 @@ test('Create and update item via API', async () => {
     expect(data.userId).toBeDefined()
     expect(data.itemId).toBeDefined()
 
-    const update = await fetch(`${API_BASE_URL}/items/${data.itemId}`, {
+    const update = await fetch(`${process.env.API_BASE_URL}/items/${data.itemId}`, {
         method: 'PUT',
         headers: {
             'Authorization': idToken,
@@ -136,7 +134,7 @@ test('Create and update item via API', async () => {
 
 // Verifies DynamoDB stores SQL injection attempts as plain text (NoSQL database doesn't execute SQL commands)
 test('Handles potential SQL injection as plain text', async () => {
-    const response = await fetch(`${API_BASE_URL}/items`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/items`, {
         method: 'POST',
         headers: {
             'Authorization': idToken,
@@ -156,7 +154,7 @@ test('Handles potential SQL injection as plain text', async () => {
 
 test('User isolation - users cannot access each other\'s items', async ({browser}) => {
     // Step 1 & 2: User 1 already logged in (beforeEach), create item
-    const user1Response = await fetch(`${API_BASE_URL}/items`, {
+    const user1Response = await fetch(`${process.env.API_BASE_URL}/items`, {
         method: 'POST',
         headers: { 
             'Authorization': idToken, 
@@ -190,7 +188,7 @@ test('User isolation - users cannot access each other\'s items', async ({browser
     const tokenText = await page2.locator('#id-token').textContent() 
     const user2Token = tokenText.trim() 
 
-    const user2Response = await fetch(`${API_BASE_URL}/items`, {
+    const user2Response = await fetch(`${process.env.API_BASE_URL}/items`, {
         method: 'POST',
         headers: { 
             'Authorization': user2Token, 
@@ -203,7 +201,7 @@ test('User isolation - users cannot access each other\'s items', async ({browser
     })
     const user2Item = await user2Response.json()
 
-    const response = await fetch(`${API_BASE_URL}/items`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/items`, {
         method: 'GET',
         headers: {
             'Authorization': user2Token
@@ -232,7 +230,7 @@ test('User isolation - users cannot access each other\'s items', async ({browser
 test('Handles very long title input', async () => {
     const longTitle = 'A'.repeat(10000) 
     
-    const response = await fetch(`${API_BASE_URL}/items`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/items`, {
         method: 'POST',
         headers: {
             'Authorization': idToken,

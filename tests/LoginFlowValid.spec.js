@@ -21,7 +21,6 @@ test.beforeEach(async ({page}) => {
     passwordPage = new PasswordPage(page)
     await page.goto(baseUrl)
     await page.getByText('Login with Cognito').click()
-    await page.getByRole('textbox', {name: 'Email address'}).waitFor({ timeout: 10000 })
 })
 
 test('User Login 1', async({page}) => {
