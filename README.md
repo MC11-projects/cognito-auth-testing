@@ -8,6 +8,8 @@ This project demonstrates comprehensive test automation for AWS Cognito authenti
 
 The test suite validates core authentication flows including login, logout, signup, and password reset functionality. Tests are implemented using the Page Object Model pattern for maintainability and run in a CI/CD pipeline via GitHub Actions.
 
+After 11 years in Manual QA, I built this project to master the intersection of Cloud Infrastructure and Test Automation. It represents a shift from testing 'what' is built to understanding 'how' it's built.
+
 **Key Features:**
 - UI tests using Playwright with Page Object Model architecture
 - API tests for CRUD operations (POST, GET, PUT, DELETE)
@@ -15,6 +17,11 @@ The test suite validates core authentication flows including login, logout, sign
 - Cognito-based authentication and authorization
 - Automated CI/CD pipeline with GitHub Actions
 - User isolation testing to ensure data security
+
+**Testing Strategy**
+- Risk-Based Testing: Prioritizing critical authentication paths (Login/MFA) that impact 100% of users.
+- Security-First Automation: Validating User Isolation at the API layer to ensure User A cannot access or modify User B's data (IDOR protection).
+- Resilient Locators: Utilizing user-facing attributes (Roles, Labels) and strategic CSS selectors to minimize test flakiness against Cognito’s dynamic UI.
 
 ## Tech Stack
 
@@ -42,7 +49,7 @@ The application consists of two main components:
 - Tests run across Chromium and WebKit browsers
 
 **2. Serverless Backend:**
-- **DynamoDB:** Stores user data with partition key (userId)
+- **DynamoDB:** NoSQL data store utilizing a Partition Key (userId) to enforce data sharding and efficient lookups for authenticated sessions
 - **Lambda Functions:** Handle CRUD operations with Node.js runtime
 - **API Gateway:** REST API with Cognito Authorizer for secured endpoints
 - **Cognito User Pool:** Manages user authentication and authorization
@@ -145,7 +152,7 @@ Configuration: `.github/workflows/playwright.yml`
 
 ## Future Improvements
 
-- Add tests for email confirmation flow (currently requires manual email code entry)
+- Integration with AWS SES/SNS or Mailosaur to automate MFA/Email verification codes for full E2E coverage.
 - Expand test coverage for edge cases and error scenarios
 - Implement visual regression testing
 - Add performance testing for API endpoints
@@ -153,7 +160,7 @@ Configuration: `.github/workflows/playwright.yml`
 
 ## Author
 
-MC - Manual QA Engineer transitioning to Automation Testing
+C.Popescu - Manual QA Engineer transitioning to Automation Testing
 
 ## License
 
