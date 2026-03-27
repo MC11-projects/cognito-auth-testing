@@ -1,4 +1,4 @@
-import { page } from "@playwright/test";
+// Page Object for Cognito email entry screen - handles email input and navigation to password screen
 
 export class EmailPage {
 

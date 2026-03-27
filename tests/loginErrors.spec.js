@@ -1,13 +1,16 @@
+// This file tests error scenarios/negative test cases for Cognito authentication
 import { test, expect } from '@playwright/test'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import { EmailPage } from '../pages/EmailPage'
 import { PasswordPage } from '../pages/PasswordPage'
 
+// Conditional for CI which does not get the .env file, gets variables from Github secrets
 if (fs.existsSync('.env')) {
     dotenv.config()
 }
 
+// POM variables that are shared across all tests, created in beforeEach and used in the tests themselves
 let emailPage
 let passwordPage
 
@@ -49,7 +52,6 @@ test('Invalid Email', async ({page}) => {
 
 test('Invalid Password', async ({page}) => {
     const email = process.env.TEST_EMAIL1
-    const passwordField = page.getByRole('textbox', {name: 'Password'})
     
     await emailPage.EmailInput(email)
     await emailPage.clickNextButton()

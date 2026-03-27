@@ -1,4 +1,5 @@
-import { page, expect } from "@playwright/test";
+// Page Object for Cognito reset password screen - handles reset password screen navigation and assertions
+import { expect } from '@playwright/test'
 
 export class PasswordResetPage {
 
@@ -11,6 +12,7 @@ export class PasswordResetPage {
         await ResetPasswordButton.click()
     }
 
+ // Validates reset page UI only - cannot complete reset flow without access to email verification code
     async validateResetPageUI() {
         await expect(this.page.getByText('Reset password', {exact: true})).toBeVisible()
         await expect(this.page.getByText('We have sent a password reset code in an Email message to t***@e***. Enter your code and your new password.')).toBeVisible()

@@ -1,6 +1,4 @@
-import { page } from "@playwright/test";
-import { timeLog } from "console";
-import { TIMEOUT } from "dns";
+// Page Object for Cognito password screen - handles password input and navigation to home page/forgot password screen
 
 export class PasswordPage {
 
@@ -10,7 +8,7 @@ export class PasswordPage {
 
     async PasswordInput(password){
         const FillPassword = this.page.getByRole('textbox', {name: 'Password'})
-        await FillPassword.waitFor({timeout: 15000})
+        await FillPassword.waitFor({timeout: 25000}) // Longer timeout than email screen - password screen consistently takes more time to load after email validation
         await FillPassword.fill(password)
     }
 

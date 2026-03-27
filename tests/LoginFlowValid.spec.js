@@ -1,3 +1,4 @@
+// This file tests successful login scenarios for Cognito authentication
 import { test, expect } from '@playwright/test'
 import dotenv from 'dotenv'
 import fs from 'fs'
@@ -5,10 +6,12 @@ import { EmailPage } from '../pages/EmailPage'
 import { PasswordPage } from '../pages/PasswordPage'
 import { PasswordResetPage } from '../pages/PasswordResetPage'
 
+// Conditional for CI which does not get the .env file, gets variables from Github secrets
 if (fs.existsSync('.env')) {
     dotenv.config()
 }
 
+// POM variables that are shared across all tests, created in beforeEach and used in the tests themselves
 let emailPage
 let passwordPage
 
@@ -81,6 +84,8 @@ test('Show your password checkbox', async ({page}) => {
     await emailPage.clickNextButton()
     await passwordPage.PasswordInput('password')
     await passwordPage.clickContinue()
+
+    // Using CSS class locator - Cognito's password field lacks semantic attributes in order getByText/Role/Label
     await expect(page.locator('.awsui_input_2rhyz_uz5yt_149')).toHaveAttribute('type', 'password')
     await passwordPage.toggleShowPassword()
     await expect(page.locator('.awsui_input_2rhyz_uz5yt_149')).toHaveAttribute('type', 'text')
@@ -90,6 +95,8 @@ test('Show your password checkbox', async ({page}) => {
 
 test('Forgot your password UI check', async({page}) => {
     const email = process.env.TEST_EMAIL3
+
+    // PasswordResetPage is only used in this test - created locally instead of beforeEach to avoid unncessary overhead
     const resetPage = new PasswordResetPage(page)
 
     await emailPage.EmailInput(email)
