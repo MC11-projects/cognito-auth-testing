@@ -152,11 +152,9 @@ Configuration: `.github/workflows/playwright.yml`
 
 ## Future Improvements
 
-- Integration with AWS SES/SNS or Mailosaur to automate MFA/Email verification codes for full E2E coverage.
-- Expand test coverage for edge cases and error scenarios
-- Implement visual regression testing
-- Add performance testing for API endpoints
-- Create custom test reporters for enhanced CI output
+- **Docker:** Containerize application for consistent deployment across environments
+- **Performance Testing:** Add JMeter tests to validate API performance under load
+- **Email Automation:** Integrate AWS SES/SNS or Mailosaur for automated MFA/email verification testing
 
 ## Author
 
