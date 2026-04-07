@@ -148,3 +148,7 @@ vite.config.ts.timestamp-*
 # Allure
 allure-results/
 allure-report/
+
+# OS files
+# WSL/Windows metadata
+*:Zone.Identifier

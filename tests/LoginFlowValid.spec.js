@@ -93,7 +93,7 @@ test('Show your password checkbox', async ({page}) => {
 })
 
 test('Forgot your password UI check', async({page}) => {
-    const email = process.env.TEST_EMAIL3
+    const email = process.env.TEST_EMAIL2
 
     // PasswordResetPage is only used in this test - created locally instead of beforeEach to avoid unncessary overhead
     const resetPage = new PasswordResetPage(page)

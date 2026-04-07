@@ -38,6 +38,7 @@ test('Empty Password field', async ({page}) => {
     await emailPage.clickNextButton()
     await passwordPage.PasswordInput('')
     await passwordPage.clickContinue()
+    await page.waitForLoadState('networkidle')
     await expect(page.getByText('Missing password.')).toBeVisible()
 
 })
@@ -56,6 +57,7 @@ test('Invalid Password', async ({page}) => {
     await emailPage.clickNextButton()
     await passwordPage.PasswordInput('password')
     await passwordPage.clickContinue()
+    await page.waitForLoadState('networkidle')
     await expect(page.getByText('Invalid input: Incorrect username or password.', {exact: true})).toBeVisible()
 
 })

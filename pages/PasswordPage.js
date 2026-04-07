@@ -7,9 +7,9 @@ export class PasswordPage {
     }
 
     async PasswordInput(password){
-        const FillPassword = this.page.getByRole('textbox', {name: 'Password'})
-        await FillPassword.waitFor({timeout: 25000}) // Longer timeout than email screen - password screen consistently takes more time to load after email validation
-        await FillPassword.fill(password)
+        const passwordField = this.page.getByRole('textbox', { name: 'Password' })
+        await passwordField.waitFor({ state: 'visible' })
+        await passwordField.fill(password)
     }
 
     async clickContinue() {
