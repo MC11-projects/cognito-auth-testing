@@ -74,13 +74,21 @@ Authentication flow:
    git clone https://github.com/MC11-projects/cognito-auth-testing.git
    cd cognito-auth-testing
 ```
+2. **Docker Setup:**
+```bash
+   # Build the image
+   docker build -t p1-app . 
 
-2. **Install dependencies:**
+   # Run the container with your .env secrets
+   docker run -d -p 3000:3000 --env-file .env --name p1-running p1-app
+```
+
+3. **Install dependencies:**
 ```bash
    npm install
 ```
 
-3. **Configure environment variables:**
+4. **Configure environment variables:**
    - Copy `.env.example` to `.env`
    - Create three test users in your Cognito User Pool
    - Update `.env` with your test user credentials and API endpoints:
@@ -95,7 +103,7 @@ Authentication flow:
      API_BASE_URL=https://your-api-id.execute-api.region.amazonaws.com/prod
 ```
 
-4. **AWS Setup:**
+5. **AWS Setup:**
    - Create a Cognito User Pool
    - Set up API Gateway with Cognito Authorizer
    - Deploy Lambda functions
@@ -152,7 +160,6 @@ Configuration: `.github/workflows/playwright.yml`
 
 ## Future Improvements
 
-- **Docker:** Containerize application for consistent deployment across environments
 - **Performance Testing:** Add JMeter tests to validate API performance under load
 - **Email Automation:** Integrate AWS SES/SNS or Mailosaur for automated MFA/email verification testing
 
